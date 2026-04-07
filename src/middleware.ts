@@ -1,7 +1,18 @@
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
-const publicRoutes = ['/', '/api/auth', '/api/candidato/busqueda', '/api/candidato/comunidad'];
+const publicRoutes = [
+  '/',
+  '/login',
+  '/registro',
+  '/registro/candidato',
+  '/registro/empresa',
+  '/empleos',
+  '/categorias',
+  '/api/auth',
+  '/api/candidato/busqueda',
+  '/api/candidato/comunidad',
+];
 const candidatoRoutes = ['/candidato', '/api/candidato'];
 const empresaRoutes = ['/empresa', '/api/empresa'];
 const adminRoutes = ['/admin', '/api/admin'];
@@ -13,18 +24,16 @@ function matchesRoutes(pathname: string, routes: string[]): boolean {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 1. Rutas públicas → permitir
+  // 1. Rutas públicas → permitir siempre
   if (matchesRoutes(pathname, publicRoutes)) {
     return NextResponse.next();
   }
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  // 2. Sin sesión → redirect a login
+  // 2. Sin sesión → redirect a /login (sin (auth) prefix)
   if (!token) {
-    const loginUrl = req.nextUrl.clone();
-    loginUrl.pathname = '/(auth)/login';
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
   const role = token.role as string;

@@ -1,26 +1,23 @@
 import type { Metadata } from 'next';
-import { Inter, Geist } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/shared/Header';
+import Navbar from '@/components/shared/Navbar';
 import SessionProvider from '@/components/shared/SessionProvider';
-import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Portal de Trabajo',
+  title: 'IntegraJobs',
   description: 'Encuentra tu próximo empleo',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={cn("font-sans", geist.variable)}>
-      <body className={`${inter.variable} font-sans bg-background text-foreground antialiased`}>
+    <html lang="es">
+      <body className={`${inter.className} bg-background text-foreground antialiased`}>
         <SessionProvider>
-          <Header />
-          <main>{children}</main>
+          <Navbar />
+          <main className="pt-20">{children}</main>
         </SessionProvider>
       </body>
     </html>

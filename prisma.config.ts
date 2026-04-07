@@ -1,5 +1,7 @@
 import { defineConfig } from 'prisma/config';
 import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env' });
 dotenv.config({ path: '.env.local' });
 
 export default defineConfig({
@@ -14,5 +16,6 @@ export default defineConfig({
       const connectionString = process.env.DATABASE_URL!;
       return new PrismaPg({ connectionString });
     },
+    seed: 'ts-node --compiler-options {"module":"CommonJS"} prisma/seed.ts',
   },
 });

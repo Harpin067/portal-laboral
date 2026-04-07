@@ -13,7 +13,7 @@ export default function Header() {
     <header className="bg-primary text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold tracking-tight">
-          Portal de Trabajo
+          IntegraJobs
         </Link>
 
         <nav className="flex items-center gap-4 text-sm font-medium">
@@ -33,11 +33,11 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/(auth)/login" className="hover:text-secondary transition-colors">
+              <Link href="/login" className="hover:text-secondary transition-colors">
                 Iniciar sesión
               </Link>
               <Link
-                href="/(auth)/registro/candidato"
+                href="/registro/candidato"
                 className="bg-secondary hover:bg-green-600 text-white px-3 py-1 rounded transition-colors"
               >
                 Registrarse
