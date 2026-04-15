@@ -36,14 +36,15 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  const role = token.role as string;
+  // Normalizar a minúsculas: el enum Prisma devuelve EMPRESA/CANDIDATO/SUPERADMIN
+  const role = (token.role as string).toLowerCase();
 
   // 3. Admin → superusuario, permite todo
-  if (role === 'admin') {
+  if (role === 'superadmin') {
     return NextResponse.next();
   }
 
-  // 4. Rutas de admin → no admin → redirect a su dashboard
+  // 4. Rutas de admin → no superadmin → redirect a su dashboard
   if (matchesRoutes(pathname, adminRoutes)) {
     return NextResponse.redirect(new URL(`/${role}/dashboard`, req.url));
   }

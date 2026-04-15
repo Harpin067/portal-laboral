@@ -34,3 +34,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ========================
+# Herramientas de IA / Agentes / MCP
+# ========================
+.claude/
+CLAUDE.md
+.cursor/
+.windsurf/
+.roo/
+.agent/
+.codebuddy/
+.codex/
+.continue/
+.gemini/
+.kiro/
+.opencode/
+.qoder/
+.trae/
+.mcp.json
+.github/prompts/

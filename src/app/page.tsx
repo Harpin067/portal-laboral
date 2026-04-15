@@ -27,7 +27,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import HeroSearch from '@/components/shared/HeroSearch';
 import JobCard from '@/components/shared/JobCard';
-import { MOCK_JOBS } from '@/lib/mock-jobs';
+import { getActiveVacancies, toJobCard } from '@/lib/vacancy-helpers';
 
 /* ─── DATA ────────────────────────────────────────────────────────── */
 const stats = [
@@ -121,8 +121,9 @@ const socialLinks = [
 ];
 
 /* ─── PAGE ────────────────────────────────────────────────────────── */
-export default function LandingPage() {
-  const featuredJobs = MOCK_JOBS.slice(0, 3);
+export default async function LandingPage() {
+  const rawVacancies = await getActiveVacancies(3);
+  const featuredJobs = rawVacancies.map(toJobCard);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
@@ -292,7 +293,7 @@ export default function LandingPage() {
           </div>
           {/* Each card → /empleos/[id] (via JobCard) */}
           <div className="grid sm:grid-cols-3 gap-4">
-            {featuredJobs.map((job) => (
+            {featuredJobs.map((job: any) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>

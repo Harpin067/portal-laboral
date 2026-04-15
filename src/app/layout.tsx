@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/shared/Navbar';
+import PublicShell from '@/components/shared/PublicShell';
 import SessionProvider from '@/components/shared/SessionProvider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,8 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
         <SessionProvider>
-          <Navbar />
-          <main className="pt-20">{children}</main>
+          <PublicShell>{children}</PublicShell>
         </SessionProvider>
       </body>
     </html>

@@ -1,24 +1,38 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { ArrowLeft, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import JobCard from '@/components/shared/JobCard';
-import { MOCK_JOBS, CATEGORIAS_META } from '@/lib/mock-jobs';
+import { getActiveVacancies, toJobCard } from '@/lib/vacancy-helpers';
 
-export function generateStaticParams() {
-  return Object.keys(CATEGORIAS_META).map((slug) => ({ categoria: slug }));
-}
+const CATEGORIAS_META: Record<string, { label: string; color: string }> = {
+  tecnologia:  { label: 'Tecnología',  color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  diseno:      { label: 'Diseño',      color: 'bg-purple-50 text-purple-700 border-purple-200' },
+  finanzas:    { label: 'Finanzas',    color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  ingenieria:  { label: 'Ingeniería',  color: 'bg-orange-50 text-orange-700 border-orange-200' },
+  salud:       { label: 'Salud',       color: 'bg-red-50 text-red-700 border-red-200' },
+  educacion:   { label: 'Educación',   color: 'bg-yellow-50 text-yellow-700 border-yellow-200' },
+  retail:      { label: 'Retail',      color: 'bg-pink-50 text-pink-700 border-pink-200' },
+  marketing:   { label: 'Marketing',   color: 'bg-teal-50 text-teal-700 border-teal-200' },
+  manufactura: { label: 'Manufactura', color: 'bg-slate-50 text-slate-700 border-slate-200' },
+};
 
-export default function CategoriaPage({ params }: { params: { categoria: string } }) {
+export default async function CategoriaPage({ params }: { params: { categoria: string } }) {
   const meta = CATEGORIAS_META[params.categoria];
-  if (!meta) notFound();
+  if (!meta) {
+    const { notFound } = await import('next/navigation');
+    notFound();
+  }
 
-  const jobs = MOCK_JOBS.filter((j) => j.categoriaSlug === params.categoria);
+  const allVacancies = await getActiveVacancies();
+  // Filter by company industria matching the category label
+  const filtered = allVacancies.filter(
+    (v: any) => v.company?.industria?.toLowerCase() === meta.label.toLowerCase()
+  );
+  const jobs = filtered.map(toJobCard);
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
       <div className="bg-gradient-to-br from-[#0f2d6b] via-[#1A56DB] to-[#1e6fb8] pt-8 pb-14 px-6">
         <div className="max-w-4xl mx-auto">
           <Link href="/empleos">
@@ -26,10 +40,8 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
               <ArrowLeft className="h-4 w-4" /> Todos los empleos
             </Button>
           </Link>
-          <div className="flex items-center gap-3 mb-2">
-            <Badge className={`text-xs border ${meta.color}`}>{meta.label}</Badge>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-black text-white mb-1">
+          <Badge className={`text-xs border ${meta.color}`}>{meta.label}</Badge>
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-1 mt-2">
             Empleos en {meta.label}
           </h1>
           <p className="text-blue-200 text-sm">
@@ -41,7 +53,7 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {jobs.length > 0 ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {jobs.map((job) => (
+            {jobs.map((job: any) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
@@ -55,7 +67,6 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
           </div>
         )}
 
-        {/* Other categories */}
         <div className="mt-12">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Otras categorías</p>
           <div className="flex flex-wrap gap-2">

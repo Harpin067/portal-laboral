@@ -113,10 +113,11 @@ export default function CAN_FilterPanel() {
               <SelectValue placeholder="Todas las ciudades" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="lima">Lima</SelectItem>
-              <SelectItem value="arequipa">Arequipa</SelectItem>
-              <SelectItem value="trujillo">Trujillo</SelectItem>
-              <SelectItem value="cusco">Cusco</SelectItem>
+              <SelectItem value="san-salvador">San Salvador</SelectItem>
+              <SelectItem value="santa-tecla">Santa Tecla</SelectItem>
+              <SelectItem value="antiguo-cuscatlan">Antiguo Cuscatlán</SelectItem>
+              <SelectItem value="san-miguel">San Miguel</SelectItem>
+              <SelectItem value="santa-ana">Santa Ana</SelectItem>
               <SelectItem value="remoto">Remoto (cualquier lugar)</SelectItem>
             </SelectContent>
           </Select>

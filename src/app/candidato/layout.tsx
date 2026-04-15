@@ -10,6 +10,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { signOut } from 'next-auth/react';
 import {
   LayoutDashboard,
   Search,
@@ -171,7 +172,11 @@ export default function CandidatoLayout({ children }: { children: React.ReactNod
             </div>
           )}
           {!collapsed && (
-            <button className="p-1 text-gray-400 hover:text-red-500 transition-colors" aria-label="Cerrar sesión">
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+              aria-label="Cerrar sesión"
+            >
               <LogOut className="h-3.5 w-3.5" />
             </button>
           )}
@@ -225,6 +230,13 @@ export default function CandidatoLayout({ children }: { children: React.ReactNod
                     <p className="text-xs font-semibold text-[#111827] truncate">{mockUser.name}</p>
                     <p className="text-xs text-gray-400 truncate">{mockUser.email}</p>
                   </div>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                    aria-label="Cerrar sesión"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </SheetContent>
             </Sheet>

@@ -66,10 +66,33 @@ function LoginForm({ type }: { type: 'candidato' | 'empresa' }) {
     setError('');
     if (!email || !password) { setError('Completa todos los campos.'); return; }
     setLoading(true);
-    const res = await signIn('credentials', { email, password, redirect: false });
+
+    const res = await signIn('credentials', {
+      email,
+      password,
+      loginType: type,
+      redirect: false,
+    });
+
     setLoading(false);
-    if (res?.error) { setError('Correo o contraseña incorrectos.'); return; }
-    router.push(isEmpresa ? '/empresa/dashboard' : '/candidato/dashboard');
+
+    if (res?.error) {
+      // Si el error no es el genérico, es un mensaje custom desde authorize
+      const msg = res.error === 'CredentialsSignin'
+        ? 'Correo o contraseña incorrectos.'
+        : res.error;
+      setError(msg);
+      return;
+    }
+
+    // Redirección inteligente basada en el rol de la sesión
+    const { getSession } = await import('next-auth/react');
+    const session = await getSession();
+    const role = ((session?.user as any)?.role as string | undefined)?.toLowerCase();
+
+    if (role === 'superadmin') router.push('/admin/dashboard');
+    else if (role === 'empresa') router.push('/empresa/dashboard');
+    else router.push('/candidato/dashboard');
   }
 
   return (
